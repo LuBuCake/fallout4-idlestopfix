@@ -29,6 +29,7 @@ namespace Hooks
 	RE::BSEventNotifyControl Hook_PlayerCharacter_BSTEventSink_BSAnimationGraphEvent::ProcessEvent(RE::BSAnimationGraphEvent& a_event, RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_source)
 	{
 		if (a_event.tag == "IdleStop" && ShouldBlockIdleStop) {
+			Utilities::InitializeActorInstant(*Player, false);
 			Player->UpdateAnimation(1000.0f);
 			ShouldBlockIdleStop = false;
 		}
@@ -74,8 +75,8 @@ namespace Hooks
 
 	void InitializeOnLaunch()
 	{
-		uintptr_t FunctionA = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x5CB0EA }.address();
-		uintptr_t FunctionB = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x110D02C }.address();
+		uintptr_t FunctionA = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x57716A }.address();
+		uintptr_t FunctionB = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x10875EC }.address();
 
 		REL::Trampoline& trampoline = REL::GetTrampoline();
 		SetupSpecialIdleOriginal = trampoline.write_call<5>(FunctionA, &hook_func);
