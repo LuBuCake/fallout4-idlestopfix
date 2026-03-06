@@ -57,11 +57,11 @@ namespace Data
                 number = std::stoi(numberStr, nullptr, 16);
             }
             catch (const std::invalid_argument& e) {
-                REX::WARN("Error while parsing IdleFormID, error: {}", e.what());
+                logger::error("Error while parsing IdleFormID, error: {}", e.what());
                 continue;
             }
             catch (const std::out_of_range& e) {
-                REX::WARN("Error while parsing IdleFormID, error: {}", e.what());
+                logger::error("Error while parsing IdleFormID, error: {}", e.what());
                 continue;
             }
 
@@ -85,6 +85,6 @@ namespace Data
 
         ConfigMap[idleForm].push_back(IdleData(pluginFile, idleFormID));
 
-        REX::INFO("Added config: pluginFile->[{}]; idleFormID->[{}]", pluginFile, idleFormID);
+        logger::warn("Added config: pluginFile->[{}]; idleFormID->[{}]", pluginFile, idleFormID);
 	}
 }

@@ -29,6 +29,7 @@ namespace Hooks
 	RE::BSEventNotifyControl Hook_PlayerCharacter_BSTEventSink_BSAnimationGraphEvent::ProcessEvent(RE::BSAnimationGraphEvent& a_event, RE::BSTEventSource<RE::BSAnimationGraphEvent>* a_source)
 	{
 		if (a_event.tag == "IdleStop" && ShouldBlockIdleStop) {
+			RE::BGSAnimationSystemUtils::InitializeActorInstant(*Player, false);
 			Player->UpdateAnimation(1000.0f);
 			ShouldBlockIdleStop = false;
 		}
@@ -48,7 +49,7 @@ namespace Hooks
 		}
 	}
 
-	RE::BSEventNotifyControl MenuWatcher::ProcessEvent(const RE::MenuOpenCloseEvent& a_event, RE::BSTEventSource<RE::MenuOpenCloseEvent>* a_source)
+	RE::BSEventNotifyControl MenuWatcher::ProcessEvent(const RE::MenuOpenCloseEvent& a_event, RE::BSTEventSource<RE::MenuOpenCloseEvent>*)
 	{
 		if ((a_event.menuName == "LoadingMenu" || a_event.menuName == "PipboyMenu") && a_event.opening) {
 			ShouldBlockIdleStop = false;
@@ -68,16 +69,16 @@ namespace Hooks
 
 		MenuWatcherInstance = new MenuWatcher();
 		MenuWatcherInstance->Initialize();
-		
+
 		((Hook_PlayerCharacter_BSTEventSink_BSAnimationGraphEvent*)((uint64_t)Player + 0x38))->Hook_PlayerCharacter_BSTEventSink_BSAnimationGraphEvent::Sink();
 	}
 
 	void InitializeOnLaunch()
 	{
-		uintptr_t FunctionA = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x5CB0EA }.address();
-		uintptr_t FunctionB = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x110D02C }.address();
+		uintptr_t FunctionA = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x4FCDAA }.address();
+		uintptr_t FunctionB = REL::Relocation<uintptr_t>{ Utilities::GetFallout4BaseAddress() + 0x13864FC }.address();
 
-		REL::Trampoline& trampoline = REL::GetTrampoline();
+		F4SE::Trampoline& trampoline = F4SE::GetTrampoline();
 		SetupSpecialIdleOriginal = trampoline.write_call<5>(FunctionA, &hook_func);
 		trampoline.write_call<5>(FunctionB, &hook_func);
 	}

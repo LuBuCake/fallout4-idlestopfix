@@ -1,10 +1,7 @@
 #pragma once
 
-#include <Windows.h>
-
 namespace Utilities
 {
-	bool InitializeActorInstant(RE::Actor& a_actor, bool a_update3D);
 	RE::TESForm* GetFormFromMod(std::string modname, uint32_t formid);
 	uintptr_t GetFallout4BaseAddress();
 
