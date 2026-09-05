@@ -26,4 +26,12 @@ namespace Utilities
 
 		return reinterpret_cast<uintptr_t>(hModule);
 	}
+
+	MemoryRange GetGameCodeRange()
+	{
+		const auto module = REX::FModule::GetExecutingModule();
+		const auto text = module.GetSection(".text");
+
+		return { module.GetBaseAddress(), text.GetAddress(), text.GetSize() };
+	}
 }
